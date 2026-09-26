@@ -1,7 +1,7 @@
 :root {
     font-family: 'DM Sans', sans-serif;
-    color: #28201d;
-    background: #f4f0e9;
+    color: #f8ecec;
+    background: #5a1022;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -18,7 +18,7 @@ html {
 body {
     margin: 0;
     min-width: 320px;
-    background: #f4f0e9;
+    background: #5a1022;
 }
 
 button,
