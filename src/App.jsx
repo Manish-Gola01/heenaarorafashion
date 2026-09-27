@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import CoutureAssistant from './components/CoutureAssistant'
 import './App.css'
 
 const products = [
@@ -41,37 +42,31 @@ function SocialIcon({ type }) {
     return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .4 5.3.4 11.8c0 2.1.5 4.1 1.6 5.9L.3 24l6.5-1.7a11.8 11.8 0 0 0 5.3 1.3h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.1-1.2-6-3.5-8.3Zm-8.4 18.1h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.7 9.7 0 0 1-1.5-5.1c0-5.4 4.4-9.8 9.8-9.8 2.6 0 5.1 1 6.9 2.9a9.8 9.8 0 0 1 2.9 6.9c0 5.5-4.4 9.9-9.5 9.9Zm5.4-7.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-1.5-.7-2.5-1.3-3.5-2.9-.3-.5.3-.5.8-1.7.1-.2 0-.4 0-.5 0-.2-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1-1.1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.8.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.4Z" /></svg>
 }
 function App() {
-    const [bag, setBag] = useState([]); const [wishlist, setWishlist] = useState([]); const [bagOpen, setBagOpen] = useState(false); const [searchOpen, setSearchOpen] = useState(false); const [menuOpen, setMenuOpen] = useState(false); const [activeMenu, setActiveMenu] = useState(null); const [query, setQuery] = useState(''); const [quickView, setQuickView] = useState(null); const [selectedSize, setSelectedSize] = useState('M'); const [assistantOpen, setAssistantOpen] = useState(false); const [assistantPrompt, setAssistantPrompt] = useState('I need a festive look in burgundy with silk'); const [assistantResult, setAssistantResult] = useState(''); const [assistantLoading, setAssistantLoading] = useState(false); const [assistantError, setAssistantError] = useState('')
+    const [bag, setBag] = useState([]); const [wishlist, setWishlist] = useState([]); const [bagOpen, setBagOpen] = useState(false); const [searchOpen, setSearchOpen] = useState(false); const [menuOpen, setMenuOpen] = useState(false); const [activeMenu, setActiveMenu] = useState(null); const [query, setQuery] = useState(''); const [quickView, setQuickView] = useState(null); const [selectedSize, setSelectedSize] = useState('M'); const [assistantOpen, setAssistantOpen] = useState(false)
     const visibleProducts = products.filter((product) => product.name.toLowerCase().includes(query.toLowerCase()))
     const addToBag = (product, size = selectedSize) => { setBag((items) => [...items, { ...product, size }]); setBagOpen(true) }
     const toggleWishlist = (id) => setWishlist((items) => items.includes(id) ? items.filter((item) => item !== id) : [...items, id])
-    const handleAssistantSubmit = async (event) => {
-        event.preventDefault()
-        const prompt = assistantPrompt.trim()
-        if (!prompt || assistantLoading) return
-
-        setAssistantLoading(true)
-        setAssistantError('')
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: prompt }),
-            })
-            const data = await response.json()
-            if (!response.ok) throw new Error(data.error || 'The assistant could not respond. Please try again.')
-            setAssistantResult(data.reply)
-        } catch (error) {
-            setAssistantError(error.message || 'The assistant could not respond. Please try again.')
-        } finally {
-            setAssistantLoading(false)
-        }
-    }
     return <div className="site-shell">
         <div className="announcement">Complimentary shipping across India <span>•</span> Easy returns on eligible products</div>
         <header className="header"><div className="header-top"><button className="text-button mobile-menu" onClick={() => setMenuOpen(true)} aria-label="Open menu"><Icon>☰</Icon></button><button className="text-button" onClick={() => setSearchOpen(!searchOpen)} aria-label="Search"><Icon>⌕</Icon><span className="desktop-only">Search</span></button><a href="#top" className="wordmark"><span>HEENA ARORA</span><strong>FASHION</strong></a><div className="header-actions"><button className="text-button desktop-only"><Icon>♙</Icon> Account</button><button className="text-button desktop-only" onClick={() => document.getElementById('new-arrivals').scrollIntoView()}><Icon>♡</Icon> Wishlist</button><button className="text-button" onClick={() => setBagOpen(true)} aria-label="Open shopping bag"><Icon>♧</Icon><span className="desktop-only">Bag</span><b>{bag.length}</b></button></div></div>{searchOpen && <div className="search-bar"><Icon>⌕</Icon><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search sarees, collections, craft..." /><button onClick={() => { setQuery(''); setSearchOpen(false) }}>Close</button></div>}<nav className="nav">{['Women', 'Men', 'Bridal', 'Jewellery', 'Collections'].map((item) => <button className="nav-trigger" key={item} onMouseEnter={() => setActiveMenu(item)} onClick={() => setActiveMenu(activeMenu === item ? null : item)}>{item}</button>)}<a href="#new-arrivals">New arrivals</a><a className="sale" href="#new-arrivals">Sale</a></nav>{activeMenu && menuGroups[activeMenu] && <div className="mega-menu" onMouseLeave={() => setActiveMenu(null)}><div><p className="eyebrow">Explore the edit</p><h3>{activeMenu}<br /><em>by Heena Arora</em></h3><a href="#new-arrivals" onClick={() => setActiveMenu(null)} className="underlined">Shop all <span>↗</span></a></div><div className="mega-links">{menuGroups[activeMenu].map((item) => <a href="#new-arrivals" key={item} onClick={() => setActiveMenu(null)}>{item}<span>↗</span></a>)}</div><img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=600&q=85" alt="Heena Arora editorial" /></div>}</header>
         <main id="top">
-            <section className="hero"><img src="/front-page.png" alt="Heena Arora front page campaign" /><div className="hero-copy"><p className="eyebrow">The festive edit / 2026</p><h1>The new<br /><em>Indian</em> edit</h1><p>Modern silhouettes rooted in timeless Indian craftsmanship.</p><div className="button-row"><a className="button button-light" href="#new-arrivals">Shop women <span>↗</span></a><a className="button button-ghost" href="#editorial">Discover the edit <span>↗</span></a></div></div><div className="hero-caption">Noor / chapter one<br /><span>Made for celebrations</span></div></section>
+            <section className="hero" id="hero-campaign">
+                <a href="#new-arrivals" className="hero-banner-link" aria-label="Heena Arora Fashion - Explore New Arrivals Collection">
+                    <picture className="hero-picture">
+                        <source media="(max-width: 640px)" srcSet="/front-page-mobile.png" />
+                        <source media="(max-width: 1024px) and (orientation: portrait)" srcSet="/front-page-tablet.png" />
+                        <source media="(min-width: 641px)" srcSet="/front-page-desktop.png" />
+                        <img
+                            src="/front-page-desktop.png"
+                            alt="Heena Arora Fashion - Magical. Mesmerising. Majestic. Explore Collection"
+                            className="hero-img"
+                            loading="eager"
+                            fetchPriority="high"
+                        />
+                    </picture>
+                    <span className="sr-only">Explore Heena Arora New Arrivals Collection</span>
+                </a>
+            </section>
             <section className="section categories" id="categories"><div className="section-heading"><div><p className="eyebrow">Find your occasion</p><h2>Shop by category</h2></div><a className="underlined" href="#new-arrivals">View all pieces <span>↗</span></a></div><div className="category-grid">{categories.map((category) => <a className="category-card" href="#new-arrivals" key={category.name}><img loading="lazy" src={category.image} alt={category.name} /><div><span>{category.name}</span><b>↗</b></div></a>)}</div></section>
             <section className="collection-banner" id="collection"><img loading="lazy" src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=1800&q=85" alt="Editorial portrait from the Noor collection" /><div><p className="eyebrow">A study in light and movement</p><h2>The Noor<br /><em>collection</em></h2><p>An ode to quiet radiance, shaped in liquid silk and hand-finished detail.</p><a className="button button-light" href="#new-arrivals">Explore collection <span>↗</span></a></div></section>
             <section className="section products-section" id="new-arrivals"><div className="section-heading"><div><p className="eyebrow">Just landed</p><h2>New arrivals</h2></div><div className="product-note">{query ? `${visibleProducts.length} results for “${query}”` : 'The pieces we are wearing now'} <a className="underlined" href="#new-arrivals">Shop all <span>↗</span></a></div></div><div className="product-grid">{visibleProducts.map((product) => <article className="product-card" key={product.id}><div className="product-image"><img loading="lazy" src={product.image} alt={product.name} /><span className="product-tag">{product.tag}</span><button className={`heart ${wishlist.includes(product.id) ? 'active' : ''}`} onClick={() => toggleWishlist(product.id)} aria-label={`Wishlist ${product.name}`}>{wishlist.includes(product.id) ? '♥' : '♡'}</button><button className="quick-view" onClick={() => setQuickView(product)}>Quick view</button></div><div className="product-info"><div><h3>{product.name}</h3><p>{product.type}</p></div><strong>{product.price}</strong></div><button className="add-button" onClick={() => addToBag(product)}>Add to bag · M <span>+</span></button></article>)}</div></section>
@@ -91,7 +86,7 @@ function App() {
         {quickView && <div className="overlay" onClick={() => setQuickView(null)}><div className="quick-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setQuickView(null)}>×</button><img src={quickView.image} alt={quickView.name} /><div><p className="eyebrow">{quickView.tag}</p><h2>{quickView.name}</h2><p>{quickView.type}. Designed in Delhi and finished by hand.</p><strong>{quickView.price}</strong><label className="size-label" htmlFor="quick-size">Select size</label><select id="quick-size" value={selectedSize} onChange={(event) => setSelectedSize(event.target.value)}>{sizes.map((size) => <option key={size}>{size}</option>)}</select><button className="button button-dark full-button" onClick={() => { addToBag(quickView); setQuickView(null) }}>Add to bag · {selectedSize} <span>↗</span></button></div></div></div>}
         {menuOpen && <div className="mobile-menu-panel"><div className="mobile-menu-head"><a href="#top" className="wordmark"><span>HEENA ARORA</span><strong>FASHION</strong></a><button onClick={() => setMenuOpen(false)} aria-label="Close menu">×</button></div><p className="eyebrow">The house edit</p>{['Women', 'Men', 'Bridal', 'Jewellery', 'New arrivals', 'Collections', 'Sale'].map((item) => <a href="#new-arrivals" onClick={() => setMenuOpen(false)} key={item}>{item}<span>↗</span></a>)}<div className="mobile-menu-foot"><a href="#top">Account</a><a href="#top">Wishlist</a></div></div>}
         <button className="assistant-badge" onClick={() => setAssistantOpen(true)} aria-label="Open Heena Arora Couture Assistant"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=85" alt="Heena Arora Couture Assistant" /><span><strong>HEENA ARORA</strong><small>COUTURE ASSISTANT</small></span></button>
-        {assistantOpen && <div className="overlay assistant-overlay" onClick={() => setAssistantOpen(false)}><aside className="assistant-chat" onClick={(event) => event.stopPropagation()}><div className="assistant-chat-head"><div><p className="eyebrow">Heena Arora</p><h2>Couture assistant</h2></div><button onClick={() => setAssistantOpen(false)} aria-label="Close couture assistant">×</button></div><div className="assistant-welcome"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=85" alt="" /><p>Hello, I am here to help you choose the right outfit, fabric and accessories for your occasion.</p></div><div className="assistant-answer" aria-live="polite"><p className="eyebrow">{assistantLoading ? 'Thinking' : assistantError ? 'Unable to respond' : 'My suggestion'}</p><h3>{assistantError ? 'Please try again' : assistantResult ? 'A considered look' : 'Ready when you are'}</h3><p>{assistantError || (assistantLoading ? 'Finding the right look for you…' : assistantResult || 'Tell me about your occasion, preferred colours or fabrics, and I will suggest a look.')}</p></div><form className="assistant-form" onSubmit={handleAssistantSubmit}><label htmlFor="assistant-prompt">Tell me what you are looking for</label><div><input id="assistant-prompt" value={assistantPrompt} onChange={(event) => setAssistantPrompt(event.target.value)} placeholder="Example: red silk wedding lehenga" /><button type="submit" aria-label="Get outfit recommendation" disabled={assistantLoading || !assistantPrompt.trim()}>{assistantLoading ? '…' : '↗'}</button></div><small>Try an occasion, colour, fabric or mood.</small></form><a className="assistant-whatsapp" href="https://wa.me/918340319206?text=Hello%20Heena%20Arora%2C%20I%20need%20fashion%20assistance" target="_blank" rel="noreferrer">Continue on WhatsApp <span>↗</span></a></aside></div>}
+        <CoutureAssistant isOpen={assistantOpen} onClose={() => setAssistantOpen(false)} />
     </div>
 }
 export default App
