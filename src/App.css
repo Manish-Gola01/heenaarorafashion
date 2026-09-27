@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Italiana&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=DM+Sans:wght@400;500;700;800&family=Italiana&display=swap');
 
 :root {
     /* 2 PRIMARY MAJOR LUXURY COUTURE COLORS */
@@ -922,13 +922,14 @@
 .header {
     position: relative;
     z-index: 3;
-    background: var(--burgundy-metallic-subtle);
+    background: linear-gradient(180deg, #170207 0%, #23040d 50%, #150206 100%);
     padding: 0 4.5vw;
-    border-bottom: 1px solid var(--beige-border);
+    border-bottom: 1px solid rgba(219, 187, 153, 0.22);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
 }
 
 .header-top {
-    height: 92px;
+    height: 94px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -939,25 +940,35 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    line-height: 1;
-    letter-spacing: .14em;
-    background: var(--beige-gold-foil);
+    line-height: 1.05;
+    letter-spacing: .16em;
+    font-family: 'Cinzel', var(--serif), 'Times New Roman', serif;
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #f5dfc6 0%, #d8a872 26%, #ffdfb8 48%, #b88344 74%, #825420 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 28px;
-    font-weight: 700;
-    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.75));
+    transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.wordmark:hover {
+    transform: scale(1.02);
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 22px rgba(216, 168, 114, 0.4));
 }
 
 .wordmark strong {
-    background: var(--beige-gold-foil);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: .55em;
+    font-weight: 800;
+    margin-top: 7px;
+    padding-left: .55em;
+    background: linear-gradient(135deg, #e5bf92 0%, #cca06b 40%, #b58145 75%, #7a4f1d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 12px;
-    letter-spacing: .5em;
-    font-weight: 700;
-    margin-top: 7px;
-    padding-left: .5em;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.92));
 }
 
 .text-button {
@@ -2853,8 +2864,14 @@ footer {
     }
 
     .wordmark {
-        font-size: 21px;
-        font-weight: 700
+        font-size: 23px;
+        font-weight: 900;
+    }
+
+    .wordmark strong {
+        font-size: 10px;
+        letter-spacing: .48em;
+        padding-left: .48em;
     }
 
     .nav {
