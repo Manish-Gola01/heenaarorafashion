@@ -2425,7 +2425,7 @@ footer {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8vw;
-    padding: 50px 0 75px;
+    padding: 20px 0 65px;
 }
 
 .footer-column {
