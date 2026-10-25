@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import CoutureAssistant from './components/CoutureAssistant'
 import StudioEditor from './components/StudioEditor'
 import CataloguePage from './components/CataloguePage'
@@ -184,6 +185,7 @@ function App() {
             <span className="floating-whatsapp-text">Chat with us</span>
         </a>
         <CoutureAssistant isOpen={assistantOpen} onClose={() => setAssistantOpen(false)} />
+        <SpeedInsights />
     </div>
 }
 export default App
